@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moviesdb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mydb
+  template:
+    metadata:
+      labels:
+        app: mydb
+    spec:
+      containers:
+        - name: mydb
+          image: mongo
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_DATABASE
+              value: db-movies
+          volumeMounts:
+            - name: mongodb-data
+              mountPath: /data/db
+            - name: mongodb-dump
+              mountPath: /db-movies
+              readOnly: true
+          resources:
+            limits:
+              memory: "512Mi"
+            requests:
+              memory: "256Mi"
+      volumes:
+        - name: mongodb-data
+          emptyDir: {}
+        - name: mongodb-dump
+          hostPath:
+            path: ../backend/dump
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dbmovies-service
+spec:
+  selector:
+    app: mydb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+  type: ClusterIP
+
+
