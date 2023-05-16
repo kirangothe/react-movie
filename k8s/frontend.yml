@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: kirangothe/sprboot-reactmongo-movies:latest
+          image: movies-front
           ports:
             - containerPort: 3000
           env:

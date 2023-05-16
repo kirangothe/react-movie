@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: kirangothe/sprboot-mongo-moviesapi:latest
+          image: movies-api
           ports:
             - containerPort: 8095
           env:
