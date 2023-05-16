@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: moviesapi-deployment
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: backend
@@ -14,23 +14,23 @@ spec:
     spec:
       containers:
         - name: backend
-          image: movies-api
+          image: kirangothe/movies-api:latest
           ports:
             - containerPort: 8095
           env:
             - name: MONGO_HOST
               valueFrom:
-                secretKeyRef:
+                configMapKeyRef:
                   name: mongodb-credentials
                   key: host
             - name: MONGO_PORT
               valueFrom:
-                secretKeyRef:
+                configMapKeyRef:
                   name: mongodb-credentials
                   key: port
             - name: MONGO_DATABASE
               valueFrom:
-                secretKeyRef:
+                configMapKeyRef:
                   name: mongodb-credentials
                   key: database
 
@@ -46,5 +46,6 @@ spec:
     - protocol: TCP
       port: 8095
       targetPort: 8095
-  type: ClusterIP
+      nodePort: 30000  # Choose an available node port
+  type: NodePort
 

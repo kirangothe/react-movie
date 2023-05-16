@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: frontend-deployment
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: frontend
@@ -14,12 +14,12 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: movies-front
+          image: kirangothe/movies-front:latest
           ports:
             - containerPort: 3000
           env:
             - name: REACT_APP_API_URL
-              value: http://moviesapi-service:8095
+              value: http://3.105.194.234:30830
 
 ---
 apiVersion: v1
