@@ -12,14 +12,6 @@ spec:
       labels:
         app: mydb
     spec:
-      initContainers:
-        - name: restore-database
-          image: mongo
-          command: ["mongorestore", "--db", "db-movies", "--drop", "--dir", "/db-movies"]
-          volumeMounts:
-            - name: mongodb-dump
-              mountPath: /db-movies
-              readOnly: true
       containers:
         - name: mydb
           image: mongo
@@ -31,12 +23,20 @@ spec:
           volumeMounts:
             - name: mongodb-data
               mountPath: /data/db
+            - name: mongodb-dump
+              mountPath: /db-movies
+              readOnly: true
+          # resources:
+          #   limits:
+          #     memory: "512Mi"
+          #   requests:
+          #     memory: "256Mi"
       volumes:
         - name: mongodb-data
           emptyDir: {}
         - name: mongodb-dump
           hostPath:
-            path: /home/ubuntu/react-movie/k8/dump
+            path: /dump
 
 ---
 apiVersion: v1
@@ -51,3 +51,5 @@ spec:
       port: 27017
       targetPort: 27017
   type: ClusterIP
+
+

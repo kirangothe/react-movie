@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: mongodb-credentials
 data:
-  host: 3.105.194.234:30830
+  host: 3.105.194.234
   port: "27017"
   database: db-movies
