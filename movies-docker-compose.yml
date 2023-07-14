@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  api:
+    image: my-api
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mymongo:27017/db-movies
+     # - SPRING_DATA_MONGODB_USERNAME=root
+     # - SPRING_DATA_MONGODB_PASSWORD=kiran
+    depends_on:
+      - mydb
+    networks:
+      - my-network
+    container_name: my-api-container
+  mydb:
+    image: mongo
+    volumes:
+      - mongodb-data:/data/db
+      - ./dump:/data/db
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      #- MONGO_INITDB_ROOT_PASSWORD=kiran
+      # - MONGO_INITDB_DATABASE=db-movies
+    networks:
+      - my-network
+    container_name: mymongo
+  reactapp:
+    image: reactapp
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+      - mydb
+    networks:
+      - my-network
+    container_name: my-reactapp-container
+
+networks:
+  my-network:
+
+volumes:
+  mongodb-data:
